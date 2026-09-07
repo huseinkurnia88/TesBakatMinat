@@ -2,439 +2,539 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>Tes Bakat Minat — Institut Asia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assessment Bakat Minat — Institut Asia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --navy-bg: #090D1A;
-    --navy-surface: #10162A;
-    --navy-card: rgba(22, 30, 58, 0.7);
+  :root {
+    --bg-dark: #070913;
+    --card-bg: rgba(17, 24, 48, 0.75);
+    --border-glass: rgba(255, 255, 255, 0.1);
+    --border-glow: rgba(255, 200, 55, 0.6);
     --gold: #FFC837;
-    --gold-glow: rgba(255, 200, 55, 0.4);
-    --cyan-glow: rgba(56, 189, 248, 0.35);
-    --text-main: #FFFFFF;
-    --text-muted: #94A3B8;
-    --border-glass: rgba(255, 255, 255, 0.12);
-    --border-focus: rgba(255, 200, 55, 0.6);
-    
+    --gold-dim: rgba(255, 200, 55, 0.15);
+    --cyan: #38BDF8;
+    --text: #F8FAFC;
+    --text-dim: #94A3B8;
     --r: #38BDF8; --i: #A855F7; --a: #F43F5E; --s: #10B981; --e: #FFC837; --c: #06B6D4;
   }
-  
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;overflow-x:hidden;}
-  
-  body{
-    background-color: var(--navy-bg);
-    background-image: 
-      radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(255, 200, 55, 0.12) 0px, transparent 50%);
-    color: var(--text-main);
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-dark);
+    color: var(--text);
     font-family: 'Plus Jakarta Sans', sans-serif;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
-    -webkit-font-smoothing: antialiased;
+    flex-direction: column;
+    overflow-x: hidden;
+    position: relative;
   }
 
-  /* Glow ambient aura */
-  .ambient-glow {
+  /* Dynamic Cyber Background */
+  .grid-bg {
     position: fixed;
-    width: 300px;
-    height: 300px;
-    background: var(--gold-glow);
-    filter: blur(120px);
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .orb {
+    position: fixed;
     border-radius: 50%;
+    filter: blur(140px);
     pointer-events: none;
     z-index: 0;
-    animation: drift 10s infinite alternate ease-in-out;
   }
-  @keyframes drift {
-    0% { transform: translate(-30%, -20%); }
-    100% { transform: translate(30%, 30%); }
-  }
-
-  #app{
-    width: 100%;
-    max-width: 480px;
-    min-height: 100vh;
-    background: rgba(16, 22, 42, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-left: 1px solid var(--border-glass);
-    border-right: 1px solid var(--border-glass);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
-  }
+  .orb-1 { width: 450px; height: 450px; background: rgba(255, 200, 55, 0.08); top: -100px; left: -100px; }
+  .orb-2 { width: 500px; height: 500px; background: rgba(56, 189, 248, 0.08); bottom: -150px; right: -100px; }
 
   /* Top Navigation */
-  .topbar{
-    background: rgba(10, 15, 30, 0.7);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-glass);
-    padding: 20px 24px;
-    position: sticky;
-    top: 0;
+  header {
+    position: relative;
     z-index: 10;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
-  .brand{
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    display: flex; 
-    align-items: center; 
+  .brand-badge {
+    display: inline-flex;
+    align-items: center;
     gap: 10px;
-    color: var(--text-main);
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    border-radius: 99px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
   }
-  .brand .dot{
+  .brand-dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: var(--gold);
     box-shadow: 0 0 10px var(--gold);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.85); }
   }
 
-  .progress-wrap{ margin-top: 14px; display: none; }
-  .progress-track{
-    height: 5px; 
-    background: rgba(255, 255, 255, 0.08); 
-    border-radius: 99px; 
-    overflow: hidden;
-  }
-  .progress-fill{
-    height: 100%; 
-    background: linear-gradient(90deg, #FFC837, #FF8008); 
-    box-shadow: 0 0 12px var(--gold-glow);
-    border-radius: 99px; 
-    transition: width .4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .progress-label{
-    font-size: 11px; 
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: var(--text-muted); 
-    margin-top: 8px; 
-    display: flex; 
-    justify-content: space-between;
-  }
-
-  /* Screens */
-  .screen{
-    padding: 32px 24px 44px; 
-    flex: 1; 
-    display: none; 
-    flex-direction: column;
-  }
-  .screen.active{
-    display: flex; 
-    animation: slideUpFade .4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  @keyframes slideUpFade{
-    from{ opacity: 0; transform: translateY(12px); }
-    to{ opacity: 1; transform: translateY(0); }
-  }
-
-  h1{
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
-    line-height: 1.2;
-    margin: 0 0 12px;
-    background: linear-gradient(135deg, #FFFFFF 60%, var(--gold));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .lead{ color: var(--text-muted); font-size: 14px; line-height: 1.6; margin: 0 0 30px; }
-
-  /* Input Fields */
-  .field{ margin-bottom: 20px; }
-  .field label{
-    display: block; 
-    font-size: 12px; 
-    font-weight: 600; 
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: var(--text-muted); 
-    margin-bottom: 8px;
-  }
-  .field input{
-    width: 100%; 
-    padding: 15px 16px; 
-    border-radius: 14px;
-    border: 1px solid var(--border-glass); 
-    font-size: 15px;
-    font-family: inherit; 
-    background: rgba(255, 255, 255, 0.04);
-    color: #fff;
-    outline: none; 
-    transition: all .25s ease;
-  }
-  .field input:focus{
-    border-color: var(--gold);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 20px rgba(255, 200, 55, 0.15);
-  }
-
-  /* Interactive Buttons */
-  .btn{
-    border: none; 
-    cursor: pointer; 
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700; 
-    font-size: 15px; 
-    letter-spacing: 0.5px;
-    border-radius: 14px;
-    padding: 16px 22px; 
-    width: 100%;
+  /* Main Container */
+  main {
+    flex: 1;
     position: relative;
-    overflow: hidden;
-    transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .btn-gold{
-    background: linear-gradient(135deg, #FFC837, #FF9900);
-    color: #0B0E17;
-    box-shadow: 0 8px 24px rgba(255, 175, 0, 0.3);
-  }
-  .btn-gold:hover{
-    box-shadow: 0 10px 30px rgba(255, 175, 0, 0.45);
-    transform: translateY(-1px);
-  }
-  .btn-gold:active{ transform: scale(0.98); }
-  .btn:disabled{ opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
-
-  /* Question Cards */
-  .q-badge{
-    display: inline-flex;
+    z-index: 5;
+    display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 11px; 
-    font-weight: 700; 
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--gold);
-    background: rgba(255, 200, 55, 0.1); 
-    border: 1px solid rgba(255, 200, 55, 0.25);
-    padding: 6px 14px; 
-    border-radius: 99px; 
-    margin-bottom: 18px;
-    width: fit-content;
-  }
-  .q-text{
-    font-family: 'Space Grotesk', sans-serif; 
-    font-size: 20px; 
-    font-weight: 700;
-    color: #fff; 
-    line-height: 1.4; 
-    margin: 0 0 24px;
-  }
-  .options{ display: flex; flex-direction: column; gap: 12px; }
-  .option{
-    text-align: left; 
-    border: 1px solid var(--border-glass); 
-    background: var(--navy-card);
-    border-radius: 16px; 
-    padding: 16px 18px; 
-    font-size: 14.5px; 
-    font-family: inherit;
-    color: #CBD5E1; 
-    cursor: pointer; 
-    position: relative;
-    transition: all .2s ease;
-  }
-  .option:hover{
-    border-color: rgba(255, 255, 255, 0.3);
-    background: rgba(35, 45, 80, 0.7);
-    color: #fff;
-    transform: translateX(4px);
-  }
-  .option.picked{
-    border-color: var(--gold); 
-    background: linear-gradient(135deg, rgba(255, 200, 55, 0.2), rgba(255, 150, 0, 0.1));
-    color: #fff;
-    box-shadow: 0 0 20px rgba(255, 200, 55, 0.25);
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
   }
 
-  /* Futuristic Loader */
-  .loading-wrap{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  .radar-spinner{
+  .screen {
+    width: 100%;
+    display: none;
+  }
+  .screen.active {
+    display: block;
+    animation: zoomFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes zoomFade {
+    from { opacity: 0; transform: scale(0.97) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* SCREEN 0: STEPPED ONBOARDING CARD */
+  .onboarding-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 28px;
+    padding: 44px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
     position: relative;
-    width: 64px;
-    height: 64px;
+    overflow: hidden;
+  }
+  .step-indicator {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 30px;
+  }
+  .step-pill {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    transition: background 0.3s;
+  }
+  .step-pill.active { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+
+  .hero-tag {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--cyan);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 34px;
+    line-height: 1.25;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .lead { color: var(--text-dim); font-size: 16px; margin-bottom: 36px; line-height: 1.6; }
+
+  .bio-step { display: none; }
+  .bio-step.active { display: block; animation: slideIn 0.3s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+
+  .input-group {
+    position: relative;
     margin-bottom: 24px;
   }
-  .radar-spinner::before, .radar-spinner::after{
-    content: "";
+  .input-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .modern-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    border-radius: 16px;
+    padding: 18px 20px;
+    font-size: 18px;
+    color: #fff;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.25s;
+  }
+  .modern-input:focus {
+    border-color: var(--gold);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 20px rgba(255, 200, 55, 0.2);
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 18px 28px;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-gold {
+    background: linear-gradient(135deg, #FFC837, #FF9900);
+    color: #0B0E17;
+    box-shadow: 0 8px 25px rgba(255, 175, 0, 0.25);
+    flex: 2;
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255, 175, 0, 0.4); }
+  .btn-back {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    color: var(--text-dim);
+    flex: 1;
+  }
+  .btn-back:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+  /* SCREEN 1: QUIZ INTERFACE */
+  .quiz-top {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .counter-badge {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .bar-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 30px;
+  }
+  .bar-progress {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--gold), #FF8008);
+    box-shadow: 0 0 12px var(--gold);
+    transition: width 0.3s ease;
+  }
+
+  .question-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 32px;
+    min-height: 68px;
+  }
+
+  /* 2-Column Grid Options */
+  .grid-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .option-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-glass);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 22px 20px;
+    color: #E2E8F0;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.5;
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .option-index {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--gold);
+    background: var(--gold-dim);
+    padding: 4px 8px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .option-card:hover {
+    border-color: rgba(255, 200, 55, 0.5);
+    transform: translateY(-3px);
+    background: rgba(26, 36, 68, 0.8);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+  .option-card.picked {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(255, 200, 55, 0.2), rgba(255, 128, 0, 0.1));
+    box-shadow: 0 0 25px rgba(255, 200, 55, 0.2);
+  }
+
+  /* SCREEN 2: RADAR LOADING */
+  .loading-card {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .radar-container {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 30px;
+  }
+  .radar-ring {
     position: absolute;
     inset: 0;
     border-radius: 50%;
     border: 2px solid transparent;
     border-top-color: var(--gold);
-    animation: spin 1s linear infinite;
+    animation: rotate 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   }
-  .radar-spinner::after{
-    border-top-color: #38BDF8;
-    animation-duration: 1.6s;
+  .radar-ring:nth-child(2) {
+    inset: 12px;
+    border-top-color: var(--cyan);
+    animation-duration: 1.8s;
     animation-direction: reverse;
-    inset: 8px;
   }
-  @keyframes spin{ to{ transform: rotate(360deg); } }
-  .loading-text{
-    font-family: 'Space Grotesk', sans-serif; 
-    color: var(--text-main); 
-    font-size: 16px;
-    letter-spacing: 0.5px;
-  }
+  @keyframes rotate { to { transform: rotate(360deg); } }
 
-  /* Result Screen */
-  .result-hero{
-    background: linear-gradient(160deg, rgba(30, 41, 75, 0.8), rgba(15, 23, 42, 0.95));
+  /* SCREEN 3: RESULT DASHBOARD (BENTO STYLE) */
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .result-banner {
+    grid-column: span 2;
+    background: linear-gradient(145deg, rgba(23, 33, 66, 0.9), rgba(11, 16, 33, 0.95));
     border: 1px solid var(--border-glass);
-    color: #fff; 
-    border-radius: 24px; 
-    padding: 32px 24px; 
+    border-radius: 24px;
+    padding: 36px;
     text-align: center;
-    margin-bottom: 26px; 
-    position: relative; 
-    overflow: hidden;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+    position: relative;
   }
-  .result-hero::before{
-    content: ""; position: absolute; inset: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(255, 200, 55, 0.18), transparent 70%);
-  }
-  .result-emoji{ font-size: 48px; margin-bottom: 12px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4)); }
-  .result-type{ 
-    font-family: 'Space Grotesk', sans-serif; 
-    font-size: 26px; 
-    font-weight: 700; 
+  .result-emoji { font-size: 52px; margin-bottom: 12px; }
+  .result-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
     color: var(--gold);
-    margin: 0 0 10px;
-    text-shadow: 0 0 16px rgba(255, 200, 55, 0.3);
+    margin-bottom: 12px;
   }
-  .result-desc{ font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 320px; margin: 0 auto; }
+  .result-desc { font-size: 15px; color: var(--text-dim); max-width: 540px; margin: 0 auto; line-height: 1.6; }
 
-  .section-label{
-    font-family: 'Space Grotesk', sans-serif; 
-    font-size: 13px; 
+  .bento-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    padding: 26px;
+  }
+  .card-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cyan);
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--text-muted); 
-    margin: 0 0 16px; 
-    font-weight: 700;
+    margin-bottom: 20px;
+    display: block;
   }
 
-  .bars{ margin-bottom: 28px; }
-  .bar-row{ display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-  .bar-label{ width: 88px; font-size: 12px; font-weight: 600; color: #CBD5E1; flex-shrink: 0; }
-  .bar-track{ flex: 1; height: 7px; background: rgba(255, 255, 255, 0.07); border-radius: 99px; overflow: hidden; }
-  .bar-fill{ height: 100%; border-radius: 99px; transition: width .8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .bar-row { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+  .bar-name { width: 90px; font-size: 13px; font-weight: 600; color: var(--text-dim); }
+  .bar-bg { flex: 1; height: 8px; background: rgba(255, 255, 255, 0.06); border-radius: 99px; overflow: hidden; }
+  .bar-val { height: 100%; border-radius: 99px; transition: width 1s cubic-bezier(0.16, 1, 0.3, 1); }
 
-  .major-card{
-    background: var(--navy-card);
-    border: 1px solid var(--border-glass); 
-    border-radius: 18px; 
-    padding: 20px;
-    margin-bottom: 14px; 
-    position: relative; 
-    transition: transform .2s ease;
+  .major-item {
+    border-left: 3px solid var(--gold);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0 14px 14px 0;
+    padding: 14px 18px;
+    margin-bottom: 12px;
   }
-  .major-card:hover{ transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.2); }
-  .major-card::before{
-    content: ""; position: absolute; left: 0; top: 18px; bottom: 18px; width: 3px;
-    background: var(--gold); border-radius: 0 4px 4px 0;
-    box-shadow: 0 0 10px var(--gold);
-  }
-  .major-name{ font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: #fff; margin: 0 0 6px; }
-  .major-why{ font-size: 13px; color: var(--text-muted); line-height: 1.55; margin: 0; }
+  .major-title { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .major-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
 
-  .footer-note{ text-align: center; font-size: 12px; color: #64748B; margin-top: 24px; line-height: 1.6; }
+  /* Mobile Adjustments */
+  @media (max-width: 768px) {
+    .onboarding-card { padding: 26px 20px; }
+    h1 { font-size: 26px; }
+    .grid-options { grid-template-columns: 1fr; }
+    .result-grid { grid-template-columns: 1fr; }
+    .result-banner { grid-column: span 1; padding: 26px 20px; }
+  }
 </style>
 </head>
 <body>
 
-<div class="ambient-glow"></div>
+<div class="grid-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
 
-<div id="app">
+<header>
+  <div class="brand-badge">
+    <span class="brand-dot"></span>
+    Institut Asia Assessment
+  </div>
+  <div id="stepCounter" style="display:none; font-family:'Space Grotesk'; font-size:13px; color:var(--text-dim);">
+    Step <span id="currentStepNum" style="color:var(--gold); font-weight:700;">1</span> of 3
+  </div>
+</header>
 
-  <div class="topbar">
-    <div class="brand"><span class="dot"></span> Institut Asia · Tes Bakat Minat</div>
-    <div class="progress-wrap" id="progressWrap">
-      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-      <div class="progress-label">
-        <span id="progressLabel">Soal 1 dari 18</span>
-        <span>AI Analytics</span>
+<main>
+  <!-- SCREEN 0: INTERACTIVE ONBOARDING -->
+  <div class="screen active" id="screen-bio">
+    <div class="onboarding-card">
+      <div class="step-indicator">
+        <div class="step-pill active" id="pill-0"></div>
+        <div class="step-pill" id="pill-1"></div>
+        <div class="step-pill" id="pill-2"></div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="bio-step active" id="bioStep0">
+        <span class="hero-tag">Smart Career Path</span>
+        <h1>Mulai eksplorasi minat & potensimu</h1>
+        <p class="lead">Temukan jurusan kuliah paling tepat berdasarkan teori Holland Occupational Themes (RIASEC).</p>
+        
+        <div class="input-group">
+          <label class="input-label" for="inpNama">Siapa nama lengkapmu?</label>
+          <input type="text" class="modern-input" id="inpNama" placeholder="Ketik nama lengkap..." autofocus>
+        </div>
+        <button class="btn btn-gold" onclick="nextBioStep(0)">Lanjutkan →</button>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="bio-step" id="bioStep1">
+        <span class="hero-tag">Latar Belakang</span>
+        <h1>Dari sekolah mana kamu berasal?</h1>
+        <p class="lead">Bantu kami mengetahui asal instansi pendidikanmu saat ini.</p>
+        
+        <div class="input-group">
+          <label class="input-label" for="inpSekolah">Asal Sekolah</label>
+          <input type="text" class="modern-input" id="inpSekolah" placeholder="Contoh: SMAN 1 Malang / SMKN 4">
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="prevBioStep(1)">← Kembali</button>
+          <button class="btn btn-gold" onclick="nextBioStep(1)">Lanjutkan →</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="bio-step" id="bioStep2">
+        <span class="hero-tag">Hasil Analisis</span>
+        <h1>Kemanakah hasil tes ini dikirim?</h1>
+        <p class="lead">Hasil komprehensif dan jalur beasiswa akan dikirimkan langsung ke nomor WhatsApp kamu.</p>
+        
+        <div class="input-group">
+          <label class="input-label" for="inpWa">Nomor WhatsApp Aktif</label>
+          <input type="tel" class="modern-input" id="inpWa" placeholder="08xxxxxxxxxx">
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="prevBioStep(2)">← Kembali</button>
+          <button class="btn btn-gold" id="btnStart">Mulai Analisis Minat ⚡</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- SCREEN 0: BIODATA -->
-  <div class="screen active" id="screen-bio">
-    <h1>Kenali Potensimu, Tentukan Jalurmu ⚡</h1>
-    <p class="lead">5 menit asesmen cerdas untuk memetakan kepribadian Holland Code (RIASEC) dan rekomendasi program studi masa depan.</p>
-    <div class="field">
-      <label for="inpNama">Nama Lengkap</label>
-      <input type="text" id="inpNama" placeholder="Ketik nama lengkapmu">
-    </div>
-    <div class="field">
-      <label for="inpSekolah">Asal Sekolah</label>
-      <input type="text" id="inpSekolah" placeholder="Contoh: SMAN 1 Malang">
-    </div>
-    <div class="field">
-      <label for="inpWa">Nomor WhatsApp Aktif</label>
-      <input type="tel" id="inpWa" placeholder="08xxxxxxxxxx">
-    </div>
-    <button class="btn btn-gold" id="btnStart" style="margin-top:10px;">Mulai Tes</button>
-  </div>
-
   <!-- SCREEN 1: QUIZ -->
   <div class="screen" id="screen-quiz">
-    <div class="q-badge" id="qBadge">Soal 1</div>
-    <p class="q-text" id="qText">...</p>
-    <div class="options" id="qOptions"></div>
+    <div class="quiz-top">
+      <div>
+        <span class="hero-tag" style="margin-bottom:4px; display:block;">Pilih opsi yang paling kamu sukai</span>
+        <div class="counter-badge" id="qBadge">Pertanyaan 01 / 18</div>
+      </div>
+    </div>
+    
+    <div class="bar-container">
+      <div class="bar-progress" id="progressFill"></div>
+    </div>
+
+    <h2 class="question-heading" id="qText">...</h2>
+    <div class="grid-options" id="qOptions"></div>
   </div>
 
-  <!-- SCREEN 2: LOADING -->
+  <!-- SCREEN 2: RADAR LOADING -->
   <div class="screen" id="screen-loading">
-    <div class="loading-wrap">
-      <div class="radar-spinner"></div>
-      <div class="loading-text">Memetakan pola kepribadianmu...</div>
+    <div class="loading-card">
+      <div class="radar-container">
+        <div class="radar-ring"></div>
+        <div class="radar-ring"></div>
+      </div>
+      <h2 style="font-family:'Space Grotesk'; font-size:24px; margin-bottom:8px;">Mengkalkulasi Persona Karakter</h2>
+      <p style="color:var(--text-dim); font-size:15px;">Menghubungkan data RIASEC dengan kurikulum Institut Asia Malang...</p>
     </div>
   </div>
 
-  <!-- SCREEN 3: RESULT -->
+  <!-- SCREEN 3: RESULT DASHBOARD -->
   <div class="screen" id="screen-result">
-    <div class="result-hero">
-      <div class="result-emoji" id="resEmoji">🔧</div>
-      <p class="result-type" id="resType">Si Tukang Bikin</p>
-      <p class="result-desc" id="resDesc">...</p>
+    <div class="result-grid">
+      <div class="result-banner">
+        <div class="result-emoji" id="resEmoji">🔧</div>
+        <h2 class="result-title" id="resType">Si Tukang Bikin</h2>
+        <p class="result-desc" id="resDesc">...</p>
+      </div>
+
+      <div class="bento-card">
+        <span class="card-label">Distribusi Tipe Minat</span>
+        <div id="resBars"></div>
+      </div>
+
+      <div class="bento-card">
+        <span class="card-label">Rekomendasi Program Studi</span>
+        <div id="resMajors"></div>
+      </div>
     </div>
-
-    <p class="section-label">Spektrum Minat Kamu</p>
-    <div class="bars" id="resBars"></div>
-
-    <p class="section-label">Rekomendasi Jurusan Terbaik</p>
-    <div id="resMajors"></div>
-
-    <p class="footer-note">Analisis ini diproses otomatis. Tim konselor Institut Asia Malang akan mengirimkan detail peluang karir via WhatsApp! 🚀</p>
+    <p style="text-align:center; font-size:13px; color:var(--text-dim);">Laporan ini telah disimpan. Konselor Institut Asia Malang akan menghubungimu via WhatsApp untuk sesi konsultasi gratis. ✨</p>
   </div>
-
-</div>
+</main>
 
 <script>
 /* ====== KONFIGURASI ====== */
 const GAS_URL = "https://script.google.com/macros/s/AKfycbz3fMusJ938hGiifXmrKdo8dOtMHdjVH9VPMlvbeBh4B0Y5UOzh8m61yaGkTHyLrX8k/exec";
 
-/* ====== DATA SOAL (FALLBACK) ====== */
 const DEFAULT_QUESTIONS = [
 {q:"Kalau ada tugas kelompok, kamu paling sering jadi yang...", opts:[
   {t:"Ngerjain bagian teknis/otak-atik alat kalau ada", type:"R"},
@@ -566,50 +666,65 @@ const DEFAULT_QUESTIONS = [
 
 let QUESTIONS = DEFAULT_QUESTIONS;
 
-/* ====== PROFIL TIPE ====== */
 const PROFILES = {
   R:{emoji:"🔧", name:"Si Tukang Bikin", color:"var(--r)",
-     desc:"Kamu menyukai eksperimen riil, logika praktis, dan interaksi nyata dengan teknologi maupun perangkat fisik.",
-     major:"Rekayasa Sistem Komputer", why:"Sangat selaras dengan keahlian utak-atik hardware, arsitektur IoT, dan rekayasa jaringan modern."},
+     desc:"Kamu suka melihat ide terwujud secara nyata, memegang alat, dan memecahkan tantangan teknis secara langsung.",
+     major:"Rekayasa Sistem Komputer", why:"Pas untuk kamu yang ingin mendalami arsitektur IoT, jaringan pintar, dan rekayasa perangkat keras."},
   I:{emoji:"🧩", name:"Si Pemecah Masalah", color:"var(--i)",
-     desc:"Selalu kritis mengurai alasan mendasar dari setiap tantangan menggunakan pola pikir komputasional.",
-     major:"Teknik Informatika", why:"Platform ideal bagi analis logika, rekayasa software masa depan, dan kecerdasan buatan (AI)."},
+     desc:"Otakmu menyukai analitika, rasa penasaran terhadap data, dan menciptakan solusi berbasis logika tajam.",
+     major:"Teknik Informatika", why:"Platform terbaik untuk belajar algoritma mutakhir, machine learning, dan arsitektur software."},
   A:{emoji:"🎨", name:"Si Desainer Visual", color:"var(--a)",
-     desc:"Melihat solusi lewat lensa estetika, narasi visual, serta kebebasan berekspresi secara orisinal.",
-     major:"Desain Komunikasi Visual (DKV)", why:"Wadah strategis mengonversi ide kreatif menjadi identitas brand, motion art, dan UI/UX interaktif."},
+     desc:"Kamu melihat nilai estetika dan rasa di setiap hal. Karya visual adalah caramu berbicara pada dunia.",
+     major:"Desain Komunikasi Visual (DKV)", why:"Fokus pada branding, dynamic motion graphic, dan desain produk digital masa kini."},
   S:{emoji:"🤝", name:"Si Komunikator", color:"var(--s)",
-     desc:"Memiliki empati kuat dalam menggerakkan tim, koordinasi relasi, dan berorientasi pada pengembangan sesama.",
-     major:"Manajemen", why:"Pilihan tepat untuk membangun leadership, strategic public relation, dan tata kelola organisasi dinamis."},
+     desc:"Kamu memiliki empati sosial yang tinggi, mudah berkolaborasi, dan senang menggerakkan potensi sesama.",
+     major:"Manajemen", why:"Melatih leadership strategis, pengelolaan talenta tim, dan ekosistem bisnis modern."},
   E:{emoji:"🚀", name:"Si Penggerak Bisnis", color:"var(--e)",
-     desc:"Penuh inisiatif eksekusi, visioner mengidentifikasi momentum, dan piawai mengejar pertumbuhan strategis.",
-     major:"International Business Management (IBM)", why:"Tempat terbaik mengasah mental technopreneur, negosiasi tingkat lanjut, dan pasar global."},
+     desc:"Memiliki insting tajam membaca peluang, berani mengeksekusi inisiatif baru, dan berorientasi hasil.",
+     major:"International Business Management (IBM)", why:"Kurikulum global untuk mencetak technopreneur dan pemimpin korporasi lintas batas."},
   C:{emoji:"📊", name:"Si Arsitek Sistem", color:"var(--c)",
-     desc:"Teliti, terukur, dan menghargai akurasi data dalam memastikan reliabilitas sebuah operasional.",
-     major:"Akuntansi", why:"Fondasi kokoh menguasai corporate finance, business analytics, dan audit berbasis sistem modern."}
+     desc:"Teliti, terstruktur, dan menyukai kejelasan data. Kamu adalah penjaga kestabilan sistem operasional.",
+     major:"Akuntansi", why:"Pusat keahlian financial planning modern, audit digital, dan analisis keuangan strategis."}
 };
 
-/* ====== STATE ====== */
 let current = 0;
 let scores = {R:0,I:0,A:0,S:0,E:0,C:0};
 let sessionId = null;
 let biodata = {};
 
+/* Multi-Step Bio Logic */
+function nextBioStep(stepIndex){
+  if(stepIndex === 0){
+    const v = document.getElementById('inpNama').value.trim();
+    if(!v) return alert('Silakan tulis nama lengkapmu terlebih dahulu.');
+  } else if(stepIndex === 1){
+    const v = document.getElementById('inpSekolah').value.trim();
+    if(!v) return alert('Silakan tulis asal sekolahmu.');
+  }
+  
+  document.getElementById(`bioStep${stepIndex}`).classList.remove('active');
+  document.getElementById(`bioStep${stepIndex+1}`).classList.add('active');
+  document.getElementById(`pill-${stepIndex+1}`).classList.add('active');
+  document.getElementById('currentStepNum').textContent = stepIndex + 2;
+}
+
+function prevBioStep(stepIndex){
+  document.getElementById(`bioStep${stepIndex}`).classList.remove('active');
+  document.getElementById(`bioStep${stepIndex-1}`).classList.add('active');
+  document.getElementById(`pill-${stepIndex}`).classList.remove('active');
+  document.getElementById('currentStepNum').textContent = stepIndex;
+}
+
 async function loadQuestionsFromSheet(){
-  const btn = document.getElementById('btnStart');
   if(!GAS_URL || GAS_URL.indexOf('GANTI_DENGAN') === 0) return;
   try{
-    btn.disabled = true;
-    btn.textContent = 'Menghubungkan Database...';
     const res = await fetch(`${GAS_URL}?action=getSoal`);
     const data = await res.json();
     if(data.status === 'ok' && Array.isArray(data.questions) && data.questions.length > 0){
       QUESTIONS = data.questions;
     }
   }catch(err){
-    console.warn('Menggunakan data soal default:', err);
-  }finally{
-    btn.disabled = false;
-    btn.textContent = 'Mulai Tes';
+    console.warn('Fallback soal default:', err);
   }
 }
 loadQuestionsFromSheet();
@@ -628,34 +743,37 @@ document.getElementById('btnStart').addEventListener('click', ()=>{
   const nama = document.getElementById('inpNama').value.trim();
   const sekolah = document.getElementById('inpSekolah').value.trim();
   const wa = document.getElementById('inpWa').value.trim();
-  if(!nama || !sekolah || !wa){ alert('Harap isi semua informasi terlebih dahulu!'); return; }
+  if(!nama || !sekolah || !wa){ alert('Lengkapi semua kolom!'); return; }
+  
   biodata = {nama, sekolah, wa};
   sessionId = 'S' + Date.now() + Math.floor(Math.random()*1000);
   sendToSheet({action:'start', sessionId, ...biodata});
-  document.getElementById('progressWrap').style.display = 'block';
+  
+  document.getElementById('stepCounter').style.display = 'none';
   renderQuestion();
   show('screen-quiz');
 });
 
+const alphabet = ["A","B","C","D","E","F"];
 function renderQuestion(){
   const item = QUESTIONS[current];
-  document.getElementById('qBadge').textContent = `Parameter 0${current+1} / 18`;
-  document.getElementById('progressLabel').textContent = `Soal ${current+1} dari ${QUESTIONS.length}`;
-  document.getElementById('progressFill').style.width = `${(current/QUESTIONS.length)*100}%`;
+  document.getElementById('qBadge').textContent = `Pertanyaan ${String(current+1).padStart(2, '0')} / ${QUESTIONS.length}`;
+  document.getElementById('progressFill').style.width = `${((current)/QUESTIONS.length)*100}%`;
   document.getElementById('qText').textContent = item.q;
+  
   const wrap = document.getElementById('qOptions');
   wrap.innerHTML = '';
-  shuffle(item.opts).forEach(opt=>{
-    const btn = document.createElement('button');
-    btn.className = 'option';
-    btn.textContent = opt.t;
+  shuffle(item.opts).forEach((opt, idx)=>{
+    const btn = document.createElement('div');
+    btn.className = 'option-card';
+    btn.innerHTML = `<span class="option-index">${alphabet[idx]}</span> <span>${opt.t}</span>`;
     btn.addEventListener('click', ()=>selectOption(opt.type, btn));
     wrap.appendChild(btn);
   });
 }
 
 function selectOption(type, btnEl){
-  document.querySelectorAll('.option').forEach(b=>b.disabled=true);
+  document.querySelectorAll('.option-card').forEach(b=>b.style.pointerEvents='none');
   btnEl.classList.add('picked');
   scores[type]++;
   setTimeout(()=>{
@@ -666,7 +784,7 @@ function selectOption(type, btnEl){
       document.getElementById('progressFill').style.width = '100%';
       finishQuiz();
     }
-  }, 260);
+  }, 220);
 }
 
 function finishQuiz(){
@@ -678,7 +796,7 @@ function finishQuiz(){
       jurusan1:PROFILES[result.top1].major, jurusan2:PROFILES[result.top2].major});
     renderResult(result);
     show('screen-result');
-  }, 1200);
+  }, 1400);
 }
 
 function computeResult(){
@@ -698,8 +816,8 @@ function renderResult(result){
   result.sorted.forEach(([type,val])=>{
     const row = document.createElement('div');
     row.className = 'bar-row';
-    row.innerHTML = `<div class="bar-label">${PROFILES[type].name.replace('Si ','')}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${(val/maxScore)*100}%; background:${PROFILES[type].color}; box-shadow:0 0 10px ${PROFILES[type].color}"></div></div>`;
+    row.innerHTML = `<div class="bar-name">${PROFILES[type].name.replace('Si ','')}</div>
+      <div class="bar-bg"><div class="bar-val" style="width:${(val/maxScore)*100}%; background:${PROFILES[type].color};"></div></div>`;
     barsWrap.appendChild(row);
   });
 
@@ -708,8 +826,8 @@ function renderResult(result){
   [result.top1, result.top2].forEach(type=>{
     const p = PROFILES[type];
     const card = document.createElement('div');
-    card.className = 'major-card';
-    card.innerHTML = `<p class="major-name">${p.major}</p><p class="major-why">${p.why}</p>`;
+    card.className = 'major-item';
+    card.innerHTML = `<p class="major-title">${p.major}</p><p class="major-desc">${p.why}</p>`;
     majorsWrap.appendChild(card);
   });
 }
