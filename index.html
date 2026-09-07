@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Tes Bakat Minat — Institut Asia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#151B34;
+    --navy-2:#232C54;
+    --gold:#F2B705;
+    --gold-soft:#FDE9A8;
+    --red:#E8483A;
+    --paper:#F4F6FB;
+    --ink:#1B1F2A;
+    --ink-soft:#5B6178;
+    --card:#FFFFFF;
+    --line:#E3E7F2;
+    --r:#4C7DF2; --i:#7B5CF0; --a:#E8483A; --s:#1FAE7A; --e:#F2B705; --c:#2E9BB8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Plus Jakarta Sans',sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  #app{
+    width:100%;
+    max-width:460px;
+    min-height:100vh;
+    background:var(--card);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 0 60px rgba(21,27,52,0.08);
+  }
+  .topbar{
+    background:var(--navy);
+    color:#fff;
+    padding:18px 22px 16px;
+    position:relative;
+    overflow:hidden;
+  }
+  .topbar::after{
+    content:"";
+    position:absolute; right:-30px; top:-40px;
+    width:120px; height:120px; border-radius:50%;
+    background:var(--gold); opacity:0.15;
+  }
+  .brand{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:0.2px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+  .progress-wrap{margin-top:14px; display:none;}
+  .progress-track{height:6px; background:rgba(255,255,255,0.15); border-radius:99px; overflow:hidden;}
+  .progress-fill{height:100%; background:var(--gold); border-radius:99px; transition:width .35s ease;}
+  .progress-label{font-size:12px; color:rgba(255,255,255,0.7); margin-top:6px;}
+
+  .screen{padding:28px 22px 40px; flex:1; display:none; flex-direction:column;}
+  .screen.active{display:flex; animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  h1{
+    font-family:'Baloo 2',sans-serif;
+    font-size:26px;
+    line-height:1.25;
+    margin:0 0 10px;
+    color:var(--navy);
+  }
+  .lead{color:var(--ink-soft); font-size:15px; line-height:1.55; margin:0 0 26px;}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:6px;}
+  .field input{
+    width:100%; padding:13px 14px; border-radius:12px;
+    border:1.5px solid var(--line); font-size:15px;
+    font-family:inherit; background:var(--paper);
+    outline:none; transition:border-color .15s;
+  }
+  .field input:focus{border-color:var(--gold);}
+
+  .btn{
+    border:none; cursor:pointer; font-family:'Baloo 2',sans-serif;
+    font-weight:700; font-size:16px; border-radius:14px;
+    padding:15px 20px; width:100%;
+    background:var(--navy); color:#fff;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn:disabled{opacity:0.4; cursor:not-allowed;}
+  .btn-gold{background:var(--gold); color:var(--navy);}
+
+  .q-badge{
+    display:inline-block; font-size:12px; font-weight:700; color:var(--navy);
+    background:var(--gold-soft); padding:5px 12px; border-radius:99px; margin-bottom:14px;
+    width:fit-content;
+  }
+  .q-text{font-family:'Baloo 2',sans-serif; font-size:21px; color:var(--navy); line-height:1.35; margin:0 0 22px;}
+  .options{display:flex; flex-direction:column; gap:10px;}
+  .option{
+    text-align:left; border:1.5px solid var(--line); background:#fff;
+    border-radius:14px; padding:14px 16px; font-size:14.5px; font-family:inherit;
+    color:var(--ink); cursor:pointer; transition:all .12s ease;
+  }
+  .option:active{transform:scale(0.98);}
+  .option.picked{border-color:var(--navy); background:var(--navy); color:#fff;}
+
+  .loading-wrap{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;}
+  .spinner{
+    width:46px; height:46px; border-radius:50%;
+    border:4px solid var(--line); border-top-color:var(--gold);
+    animation:spin .8s linear infinite; margin-bottom:18px;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .loading-text{font-family:'Baloo 2',sans-serif; color:var(--navy); font-size:16px;}
+
+  .result-hero{
+    background:linear-gradient(160deg, var(--navy), var(--navy-2));
+    color:#fff; border-radius:20px; padding:28px 22px; text-align:center;
+    margin-bottom:22px; position:relative; overflow:hidden;
+  }
+  .result-hero::after{
+    content:""; position:absolute; left:-20px; bottom:-30px;
+    width:100px; height:100px; border-radius:50%; background:var(--gold); opacity:0.18;
+  }
+  .result-emoji{font-size:44px; margin-bottom:6px;}
+  .result-type{font-family:'Baloo 2',sans-serif; font-size:24px; font-weight:700; margin:0 0 6px;}
+  .result-desc{font-size:14px; color:rgba(255,255,255,0.85); line-height:1.5; max-width:340px; margin:0 auto;}
+
+  .bars{margin-bottom:24px;}
+  .bar-row{display:flex; align-items:center; gap:10px; margin-bottom:9px;}
+  .bar-label{width:86px; font-size:12.5px; font-weight:600; color:var(--ink-soft); flex-shrink:0;}
+  .bar-track{flex:1; height:9px; background:var(--paper); border-radius:99px; overflow:hidden;}
+  .bar-fill{height:100%; border-radius:99px; transition:width .6s ease;}
+
+  .section-label{font-family:'Baloo 2',sans-serif; font-size:14px; color:var(--navy); margin:0 0 12px; font-weight:600;}
+
+  .major-card{
+    border:1.5px solid var(--line); border-radius:16px; padding:18px;
+    margin-bottom:12px; position:relative; padding-left:20px;
+  }
+  .major-card::before{
+    content:""; position:absolute; left:0; top:14px; bottom:14px; width:4px;
+    background:var(--gold); border-radius:3px;
+  }
+  .major-name{font-family:'Baloo 2',sans-serif; font-size:17px; color:var(--navy); margin:0 0 5px;}
+  .major-why{font-size:13.5px; color:var(--ink-soft); line-height:1.5; margin:0;}
+
+  .footer-note{text-align:center; font-size:12px; color:var(--ink-soft); margin-top:22px;}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> Institut Asia · Tes Bakat Minat</div>
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-label" id="progressLabel">Soal 1 dari 18</div>
+    </div>
+  </div>
+
+  <!-- SCREEN 0: BIODATA -->
+  <div class="screen active" id="screen-bio">
+    <h1>Yuk cari tau, kamu tipe apa? 👀</h1>
+    <p class="lead">Cuma butuh 5 menit buat tau kelebihanmu dan jurusan kuliah yang paling cocok buat kamu.</p>
+    <div class="field">
+      <label for="inpNama">Nama lengkap</label>
+      <input type="text" id="inpNama" placeholder="Nama kamu">
+    </div>
+    <div class="field">
+      <label for="inpSekolah">Asal sekolah</label>
+      <input type="text" id="inpSekolah" placeholder="Nama sekolah">
+    </div>
+    <div class="field">
+      <label for="inpWa">Nomor WhatsApp</label>
+      <input type="tel" id="inpWa" placeholder="08xxxxxxxxxx">
+    </div>
+    <button class="btn btn-gold" id="btnStart" style="margin-top:8px;">Mulai Tes</button>
+  </div>
+
+  <!-- SCREEN 1: QUIZ -->
+  <div class="screen" id="screen-quiz">
+    <div class="q-badge" id="qBadge">Soal 1</div>
+    <p class="q-text" id="qText">...</p>
+    <div class="options" id="qOptions"></div>
+  </div>
+
+  <!-- SCREEN 2: LOADING -->
+  <div class="screen" id="screen-loading">
+    <div class="loading-wrap">
+      <div class="spinner"></div>
+      <div class="loading-text">Lagi ngintip kepribadian kamu...</div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: RESULT -->
+  <div class="screen" id="screen-result">
+    <div class="result-hero">
+      <div class="result-emoji" id="resEmoji">🔧</div>
+      <p class="result-type" id="resType">Si Tukang Bikin</p>
+      <p class="result-desc" id="resDesc">...</p>
+    </div>
+
+    <p class="section-label">Sebaran minat kamu</p>
+    <div class="bars" id="resBars"></div>
+
+    <p class="section-label">Jurusan yang cocok buat kamu</p>
+    <div id="resMajors"></div>
+
+    <p class="footer-note">Hasil kamu udah tersimpan. Tim Institut Asia bakal hubungin kamu lewat WhatsApp ya! 🎓</p>
+  </div>
+
+</div>
+
+<script>
+/* ====== KONFIGURASI ====== */
+// Ganti dengan Web App URL hasil deploy Apps Script (lihat code.gs)
+const GAS_URL = "https://script.google.com/macros/s/AKfycbz3fMusJ938hGiifXmrKdo8dOtMHdjVH9VPMlvbeBh4B0Y5UOzh8m61yaGkTHyLrX8k/exec";
+
+/* ====== DATA SOAL ======
+   type: R = Realistic, I = Investigative, A = Artistic, S = Social, E = Enterprising, C = Conventional */
+const QUESTIONS = [
+{q:"Kalau ada tugas kelompok, kamu paling sering jadi yang...", opts:[
+  {t:"Ngerjain bagian teknis/otak-atik alat kalau ada", type:"R"},
+  {t:"Riset & cari data pendukung sebelum mulai", type:"I"},
+  {t:"Desain slide atau visual biar menarik", type:"A"},
+  {t:"Jembatani biar semua anggota kompak", type:"S"},
+  {t:"Bagi tugas & pastikan progress on track", type:"E"},
+  {t:"Rapiin dokumen & cek detail sebelum submit", type:"C"}]},
+{q:"Waktu luang, kamu paling sering...", opts:[
+  {t:"Bongkar-pasang atau otak-atik barang", type:"R"},
+  {t:"Nonton video sains/dokumenter yang bikin mikir", type:"I"},
+  {t:"Gambar, edit video, atau bikin konten", type:"A"},
+  {t:"Nongkrong/ngobrol sama temen", type:"S"},
+  {t:"Mikirin ide jualan atau proyek sampingan", type:"E"},
+  {t:"Nyusun jadwal/checklist biar hidup lebih rapi", type:"C"}]},
+{q:"Pelajaran yang paling kamu suka biasanya yang ada unsur...", opts:[
+  {t:"Praktik langsung, bukan cuma teori", type:"R"},
+  {t:"Rumus & logika buat dipecahkan", type:"I"},
+  {t:"Seni, desain, atau ekspresi bebas", type:"A"},
+  {t:"Diskusi & presentasi", type:"S"},
+  {t:"Studi kasus bisnis atau kepemimpinan", type:"E"},
+  {t:"Data, angka, dan pencatatan rapi", type:"C"}]},
+{q:"Kalau HP kamu tiba-tiba error, reaksi pertama kamu...", opts:[
+  {t:"Coba benerin sendiri, otak-atik settingnya", type:"R"},
+  {t:"Cari tau dulu penyebabnya sebelum action", type:"I"},
+  {t:"Nggak masalah asal masih bisa dipakai buat konten", type:"A"},
+  {t:"Tanya temen yang lebih paham", type:"S"},
+  {t:"Cari cara paling cepat biar nggak ganggu aktivitas", type:"E"},
+  {t:"Cek garansi & baca manual dulu", type:"C"}]},
+{q:"Dalam circle pertemanan, kamu biasanya dikenal sebagai...", opts:[
+  {t:"Yang jago benerin/bantuin hal teknis", type:"R"},
+  {t:"Yang paling banyak tau & suka kasih insight", type:"I"},
+  {t:"Yang paling kreatif idenya", type:"A"},
+  {t:"Yang paling perhatian & jadi tempat curhat", type:"S"},
+  {t:"Yang suka ambil inisiatif & mimpin rencana", type:"E"},
+  {t:"Yang paling diandalkan soal detail & keteraturan", type:"C"}]},
+{q:"Kalau disuruh pilih ekstrakurikuler, kamu lebih milih...", opts:[
+  {t:"Robotik/otomotif", type:"R"},
+  {t:"Karya Ilmiah Remaja", type:"I"},
+  {t:"Seni/desain/fotografi", type:"A"},
+  {t:"OSIS/PMR", type:"S"},
+  {t:"Debat/wirausaha", type:"E"},
+  {t:"Pramuka/paskibra", type:"C"}]},
+{q:"Menurutmu, kerjaan paling membosankan itu yang...", opts:[
+  {t:"Cuma teori, nggak ada praktiknya", type:"R"},
+  {t:"Nggak butuh mikir sama sekali", type:"I"},
+  {t:"Kaku, nggak ada ruang buat kreativitas", type:"A"},
+  {t:"Kerja sendirian terus, nggak ada interaksi", type:"S"},
+  {t:"Nggak ada tantangan atau target", type:"E"},
+  {t:"Berantakan & nggak jelas sistemnya", type:"C"}]},
+{q:"Kalau nonton konten YouTube, kamu paling sering searching...", opts:[
+  {t:"Tutorial DIY / cara kerja mesin", type:"R"},
+  {t:"Video eksperimen atau teori-teori unik", type:"I"},
+  {t:"Behind the scene desain/animasi/film", type:"A"},
+  {t:"Vlog kehidupan orang lain", type:"S"},
+  {t:"Kisah sukses bisnis atau influencer", type:"E"},
+  {t:"Tips produktivitas & manajemen waktu", type:"C"}]},
+{q:"Kalau dikasih uang buat proyek sekolah, kamu bakal...", opts:[
+  {t:"Beli alat/bahan buat bikin sesuatu yang fungsional", type:"R"},
+  {t:"Buat eksperimen atau riset kecil", type:"I"},
+  {t:"Bikin karya visual yang estetik", type:"A"},
+  {t:"Bikin acara yang ngumpulin banyak orang", type:"S"},
+  {t:"Coba jadiin bisnis kecil-kecilan", type:"E"},
+  {t:"Susun laporan/dokumentasi yang rapi", type:"C"}]},
+{q:"Kalau lagi stuck ngerjain sesuatu, cara kamu keluar dari masalah...", opts:[
+  {t:"Coba-coba langsung praktik sampai ketemu solusinya", type:"R"},
+  {t:"Analisis dulu akar masalahnya", type:"I"},
+  {t:"Cari inspirasi dari hal-hal kreatif", type:"A"},
+  {t:"Diskusi sama orang lain buat cari solusi", type:"S"},
+  {t:"Ambil keputusan cepat & jalan terus", type:"E"},
+  {t:"Bikin daftar langkah biar lebih terarah", type:"C"}]},
+{q:"Buat kamu, hasil kerja yang memuaskan itu kalau...", opts:[
+  {t:"Barangnya jadi & berfungsi dengan baik", type:"R"},
+  {t:"Berhasil jawab pertanyaan yang rumit", type:"I"},
+  {t:"Hasilnya terlihat unik & beda dari yang lain", type:"A"},
+  {t:"Bikin orang lain senang/terbantu", type:"S"},
+  {t:"Berhasil dapat hasil yang menguntungkan", type:"E"},
+  {t:"Semuanya rapi & sesuai rencana", type:"C"}]},
+{q:"Kalau lihat masalah di sekitar (sekolah/lingkungan), reaksimu...", opts:[
+  {t:"Pengen langsung benerin secara fisik/teknis", type:"R"},
+  {t:"Pengen cari tau kenapa itu bisa terjadi", type:"I"},
+  {t:"Pengen bikin sesuatu yang menyuarakan itu lewat karya", type:"A"},
+  {t:"Pengen ajak orang lain bareng-bareng benerin", type:"S"},
+  {t:"Pengen bikin solusi yang bisa dijalankan/dimonetisasi", type:"E"},
+  {t:"Pengen bikin sistem biar nggak terulang lagi", type:"C"}]},
+{q:"Tipe game/aktivitas yang paling kamu suka...", opts:[
+  {t:"Game simulasi/build (Minecraft, dll)", type:"R"},
+  {t:"Game strategi/puzzle yang butuh mikir", type:"I"},
+  {t:"Game/aplikasi yang ada unsur desain karakter", type:"A"},
+  {t:"Game multiplayer bareng temen", type:"S"},
+  {t:"Game yang ada sistem ekonomi/trading", type:"E"},
+  {t:"Game yang butuh manajemen resource rapi", type:"C"}]},
+{q:"Kalau presentasi di depan kelas, bagian yang paling kamu suka...", opts:[
+  {t:"Demo langsung/praktik", type:"R"},
+  {t:"Jelasin data & analisis", type:"I"},
+  {t:"Desain slide-nya", type:"A"},
+  {t:"Interaksi & tanya jawab sama audiens", type:"S"},
+  {t:"Meyakinkan orang buat setuju sama idemu", type:"E"},
+  {t:"Pastikan strukturnya runtut & rapi", type:"C"}]},
+{q:"Barang yang paling berharga buat kamu biasanya...", opts:[
+  {t:"Alat/gadget yang sering kamu pakai buat bikin sesuatu", type:"R"},
+  {t:"Buku/koleksi yang berhubungan sama hal yang kamu penasaran", type:"I"},
+  {t:"Karya (gambar/foto/tulisan) yang pernah kamu buat", type:"A"},
+  {t:"Kenang-kenangan dari orang terdekat", type:"S"},
+  {t:"Sesuatu yang berhubungan sama pencapaian/usaha kamu", type:"E"},
+  {t:"Planner/jurnal yang kamu isi rutin", type:"C"}]},
+{q:"Kalau ikut lomba, kamu paling pengen ikut kategori...", opts:[
+  {t:"Lomba keterampilan/teknis", type:"R"},
+  {t:"Olimpiade sains/lomba karya tulis ilmiah", type:"I"},
+  {t:"Lomba desain/fotografi/film pendek", type:"A"},
+  {t:"Lomba debat/MC/duta", type:"S"},
+  {t:"Lomba business plan/marketing", type:"E"},
+  {t:"Lomba administrasi/akuntansi", type:"C"}]},
+{q:"Kalau ngebayangin kerjaan impian, yang paling penting buat kamu...", opts:[
+  {t:"Bisa kerja langsung pakai tangan/alat", type:"R"},
+  {t:"Bisa terus belajar hal baru & mikir", type:"I"},
+  {t:"Bisa bebas berekspresi & berkarya", type:"A"},
+  {t:"Bisa banyak interaksi & bantu orang", type:"S"},
+  {t:"Bisa punya pengaruh & penghasilan besar", type:"E"},
+  {t:"Bisa kerja dengan sistem & jenjang yang jelas", type:"C"}]},
+{q:"Terakhir, kalau harus milih satu kata buat gambarin diri kamu...", opts:[
+  {t:"Praktis", type:"R"},
+  {t:"Penasaran", type:"I"},
+  {t:"Ekspresif", type:"A"},
+  {t:"Hangat", type:"S"},
+  {t:"Ambisius", type:"E"},
+  {t:"Teliti", type:"C"}]}
+];
+
+/* ====== PROFIL TIPE ====== */
+const PROFILES = {
+  R:{emoji:"🔧", name:"Si Tukang Bikin", color:"var(--r)",
+     desc:"Kamu suka lihat sesuatu bekerja secara nyata, bukan cuma teori. Tangan gatel kalau nggak praktik langsung.",
+     major:"Rekayasa Sistem Komputer", why:"Cocok buat kamu yang suka utak-atik hardware, jaringan, dan sistem secara langsung."},
+  I:{emoji:"🧩", name:"Si Pemecah Teka-teki", color:"var(--i)",
+     desc:"Otakmu selalu penasaran \"kenapa\" dan \"gimana caranya\". Logika jalan terus tiap ada masalah.",
+     major:"Teknik Informatika", why:"Pas buat kamu yang suka logika, coding, dan memecahkan masalah lewat teknologi."},
+  A:{emoji:"🎨", name:"Si Pencipta Rasa", color:"var(--a)",
+     desc:"Kamu lihat dunia lewat visual & rasa estetik. Karya adalah cara kamu ngomong.",
+     major:"DKV", why:"Tempat buat kamu nyalurin ide kreatif jadi desain, branding, dan konten visual."},
+  S:{emoji:"🤝", name:"Si Penghubung", color:"var(--s)",
+     desc:"Kamu paling hidup kalau ada interaksi dan bisa bantu orang lain berkembang.",
+     major:"Manajemen", why:"Cocok buat kamu yang suka mengelola orang, komunikasi, dan kerja tim."},
+  E:{emoji:"🚀", name:"Si Penggerak", color:"var(--e)",
+     desc:"Kamu suka ambil keputusan cepat dan lihat peluang jadi hasil nyata.",
+     major:"IBM (International Business Management)", why:"Buat kamu yang punya jiwa bisnis, suka negosiasi, dan mikir skala global."},
+  C:{emoji:"📊", name:"Si Perapi Sistem", color:"var(--c)",
+     desc:"Kamu ngerasa tenang kalau semuanya terstruktur, tercatat, dan sesuai rencana.",
+     major:"Akuntansi", why:"Pas buat kamu yang teliti, suka angka, dan kerja dengan sistem yang rapi."}
+};
+
+/* ====== STATE ====== */
+let current = 0;
+let scores = {R:0,I:0,A:0,S:0,E:0,C:0};
+let sessionId = null;
+let biodata = {};
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+document.getElementById('btnStart').addEventListener('click', ()=>{
+  const nama = document.getElementById('inpNama').value.trim();
+  const sekolah = document.getElementById('inpSekolah').value.trim();
+  const wa = document.getElementById('inpWa').value.trim();
+  if(!nama || !sekolah || !wa){ alert('Lengkapi dulu semua kolom ya!'); return; }
+  biodata = {nama, sekolah, wa};
+  sessionId = 'S' + Date.now() + Math.floor(Math.random()*1000);
+  sendToSheet({action:'start', sessionId, ...biodata});
+  document.getElementById('progressWrap').style.display = 'block';
+  renderQuestion();
+  show('screen-quiz');
+});
+
+function renderQuestion(){
+  const item = QUESTIONS[current];
+  document.getElementById('qBadge').textContent = `Soal ${current+1}`;
+  document.getElementById('progressLabel').textContent = `Soal ${current+1} dari ${QUESTIONS.length}`;
+  document.getElementById('progressFill').style.width = `${(current/QUESTIONS.length)*100}%`;
+  document.getElementById('qText').textContent = item.q;
+  const wrap = document.getElementById('qOptions');
+  wrap.innerHTML = '';
+  shuffle(item.opts).forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = opt.t;
+    btn.addEventListener('click', ()=>selectOption(opt.type, btn));
+    wrap.appendChild(btn);
+  });
+}
+
+function selectOption(type, btnEl){
+  document.querySelectorAll('.option').forEach(b=>b.disabled=true);
+  btnEl.classList.add('picked');
+  scores[type]++;
+  setTimeout(()=>{
+    current++;
+    if(current < QUESTIONS.length){
+      renderQuestion();
+    } else {
+      document.getElementById('progressFill').style.width = '100%';
+      finishQuiz();
+    }
+  }, 280);
+}
+
+function finishQuiz(){
+  show('screen-loading');
+  setTimeout(()=>{
+    const result = computeResult();
+    sendToSheet({action:'finish', sessionId, ...scores,
+      tipeUtama:result.top1, tipeKedua:result.top2,
+      jurusan1:PROFILES[result.top1].major, jurusan2:PROFILES[result.top2].major});
+    renderResult(result);
+    show('screen-result');
+  }, 1400);
+}
+
+function computeResult(){
+  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  return {top1: sorted[0][0], top2: sorted[1][0], sorted};
+}
+
+function renderResult(result){
+  const p1 = PROFILES[result.top1];
+  document.getElementById('resEmoji').textContent = p1.emoji;
+  document.getElementById('resType').textContent = p1.name;
+  document.getElementById('resDesc').textContent = p1.desc;
+
+  const barsWrap = document.getElementById('resBars');
+  barsWrap.innerHTML = '';
+  const maxScore = Math.max(...Object.values(scores), 1);
+  result.sorted.forEach(([type,val])=>{
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `<div class="bar-label">${PROFILES[type].name.replace('Si ','')}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(val/maxScore)*100}%; background:${PROFILES[type].color}"></div></div>`;
+    barsWrap.appendChild(row);
+  });
+
+  const majorsWrap = document.getElementById('resMajors');
+  majorsWrap.innerHTML = '';
+  [result.top1, result.top2].forEach(type=>{
+    const p = PROFILES[type];
+    const card = document.createElement('div');
+    card.className = 'major-card';
+    card.innerHTML = `<p class="major-name">${p.major}</p><p class="major-why">${p.why}</p>`;
+    majorsWrap.appendChild(card);
+  });
+}
+
+function sendToSheet(payload){
+  if(!GAS_URL || GAS_URL.indexOf('GANTI_DENGAN') === 0){ return; }
+  fetch(GAS_URL, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(payload)
+  }).catch(err=>console.warn('Gagal kirim data:', err));
+}
+</script>
+</body>
+</html>
