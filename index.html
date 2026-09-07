@@ -354,13 +354,74 @@
     text-align: center;
     position: relative;
   }
-  .result-emoji { font-size: 52px; margin-bottom: 12px; }
-  .result-title {
+
+  /* Personal Greeting Section */
+  .user-greeting-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    padding: 6px 14px;
+    border-radius: 99px;
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 32px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 16px;
+  }
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+    animation: blink 1.5s infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.8); }
+  }
+
+  .greeting-lead {
+    font-size: 20px;
+    color: #FFFFFF;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .user-highlight {
+    font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
     color: var(--gold);
-    margin-bottom: 12px;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 200, 55, 0.4);
+    text-underline-offset: 4px;
+  }
+  .greeting-sub {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 22px;
+  }
+
+  .persona-highlight-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 200, 55, 0.25);
+    border-radius: 20px;
+    padding: 22px;
+    margin: 0 auto 20px;
+    max-width: 380px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(255, 200, 55, 0.05);
+  }
+
+  .result-emoji { font-size: 52px; margin-bottom: 10px; }
+  .result-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 0;
   }
   .result-desc { font-size: 15px; color: var(--text-dim); max-width: 540px; margin: 0 auto; line-height: 1.6; }
 
@@ -418,7 +479,7 @@
     Institut Asia Assessment
   </div>
   <div id="stepCounter" style="display:none; font-family:'Space Grotesk'; font-size:13px; color:var(--text-dim);">
-    Step <span id="currentStepNum" style="color:var(--gold); font-weight:700;">1</span> of 3
+    Langkah <span id="currentStepNum" style="color:var(--gold); font-weight:700;">1</span> dari 3
   </div>
 </header>
 
@@ -512,8 +573,21 @@
   <div class="screen" id="screen-result">
     <div class="result-grid">
       <div class="result-banner">
-        <div class="result-emoji" id="resEmoji">🔧</div>
-        <h2 class="result-title" id="resType">Si Tukang Bikin</h2>
+        <div class="user-greeting-pill">
+          <span class="pulse-dot"></span>
+          <span>Hasil Analisis Profil Karakter</span>
+        </div>
+
+        <p class="greeting-lead">
+          Hai kak <span id="resUserName" class="user-highlight">...</span> 👋
+        </p>
+        <p class="greeting-sub">Dari hasil uji bakat minat ini, tipe dominan kamu adalah:</p>
+
+        <div class="persona-highlight-box">
+          <div class="result-emoji" id="resEmoji">🔧</div>
+          <h2 class="result-title" id="resType">Si Tukang Bikin</h2>
+        </div>
+
         <p class="result-desc" id="resDesc">...</p>
       </div>
 
@@ -805,11 +879,17 @@ function computeResult(){
 }
 
 function renderResult(result){
+  // 1. Tampilkan sapaan nama dinamis
+  const namaPeserta = biodata.nama || "Sobat Asia";
+  document.getElementById('resUserName').textContent = namaPeserta;
+
+  // 2. Tampilkan tipe dominan hasil tes
   const p1 = PROFILES[result.top1];
   document.getElementById('resEmoji').textContent = p1.emoji;
   document.getElementById('resType').textContent = p1.name;
   document.getElementById('resDesc').textContent = p1.desc;
 
+  // 3. Render bar skor RIASEC
   const barsWrap = document.getElementById('resBars');
   barsWrap.innerHTML = '';
   const maxScore = Math.max(...Object.values(scores), 1);
@@ -821,6 +901,7 @@ function renderResult(result){
     barsWrap.appendChild(row);
   });
 
+  // 4. Render rekomendasi jurusan
   const majorsWrap = document.getElementById('resMajors');
   majorsWrap.innerHTML = '';
   [result.top1, result.top2].forEach(type=>{
